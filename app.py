@@ -3,7 +3,10 @@ import os
 import sys
 
 from flask import Flask, request
+
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
 
 GROUPME_API_URL = 'https://api.groupme.com/v3/bots/post'
 
@@ -29,7 +32,5 @@ def send_message(msg):
     app.logger.debug(data)
 
 
-if __name__ == '__main__':
-    app.logger.addHandler(logging.StreamHandler(sys.stdout))
-    app.logger.setLevel(logging.DEBUG)
+if __name__ == '__main__':  
     app.run()
