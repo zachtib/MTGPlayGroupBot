@@ -23,7 +23,7 @@ def hello_world():
 @app.route('/webhook/', methods=['POST'])
 def webhook():
     data = request.get_json()
-    app.logger.debug('Received: ' + str(data)
+    app.logger.debug('Received: ' + str(data))
     if data['sender_type'] != 'user':
         # Don't process bot messages for now
         return 'OK', 200
