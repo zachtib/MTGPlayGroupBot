@@ -38,7 +38,7 @@ def send_message(msg):
         'bot_id' : os.getenv('GROUPME_BOT_ID'),
         'text' : msg,
     }
-    app.logger.debug('Sending: ' + str(data)
+    app.logger.debug('Sending: ' + str(data))
     request = Request(GROUPME_API_URL, urlencode(data).encode())
     urlopen(request).read().decode()
 
