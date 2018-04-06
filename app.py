@@ -11,6 +11,7 @@ def hello_world():
 @app.route('/webhook/', methods=['POST'])
 def webhook():
     data = request.get_json()
+    print(data)
 
     return 'OK', 200
 
