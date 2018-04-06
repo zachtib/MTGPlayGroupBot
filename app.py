@@ -23,7 +23,7 @@ def hello_world():
 @app.route('/webhook/', methods=['POST'])
 def webhook():
     data = request.get_json()
-    app.logger.debug('Received: ' + data)
+    app.logger.debug('Received: ' + str(data)
     if data['sender_type'] != 'user':
         # Don't process bot messages for now
         return 'OK', 200
@@ -38,7 +38,7 @@ def send_message(msg):
         'bot_id' : os.getenv('GROUPME_BOT_ID'),
         'text' : msg,
     }
-    app.logger.debug('Sending: ' + data)
+    app.logger.debug('Sending: ' + str(data)
     request = Request(GROUPME_API_URL, urlencode(data).encode())
     urlopen(request).read().decode()
 
