@@ -38,3 +38,9 @@ class PollHelper:
             poll_json['conversation_id'], poll_json['created_at'], poll_json['expiration'],
             poll_json['status'], options)
         return poll
+
+    def vote(self, conversation_id, poll, option):
+        url = f'https://api.groupme.com/v3/poll/{conversation_id}/{poll.id}/{option.id}'
+        headers = {'X-Access-Token': self.access_token}
+        r = requests.post(url, data={}, headers=headers)
+        return r

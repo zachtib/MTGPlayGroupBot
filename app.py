@@ -1,10 +1,11 @@
 import logging
 import os
+import random
 import sys
 
 from flask import Flask, request
 
-from groupme.polls import Poll, PollHelper
+from groupme.polls import Poll, PollOption, PollHelper
 
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -38,9 +39,14 @@ def handle_message(message):
     
     for attachment in message['attachments']:
         if attachment['type'] == 'poll':
+            group_id = message['group_id']
             app.logger.debug('I found a poll')
-            poll: Poll = poll_helper.get_poll(message['group_id'], attachment['poll_id'])
+            poll: Poll = poll_helper.get_poll(group_id, attachment['poll_id'])
             send_message(f"That poll's title is {poll.subject}")
+            my_vote: PollOption = random.choice(poll.options)
+            resp = poll_helper.vote(group_id, poll, my_vote)
+            send_message(f'I pick "{my_vote.title}"')
+            app.logger.debug(resp)
             return 'OK', 200
 
     send_message('Hello, ' + message['name'])
