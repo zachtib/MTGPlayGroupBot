@@ -4,6 +4,8 @@ import sys
 
 from flask import Flask, request
 
+from groupme.polls import Poll, PollHelper
+
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -13,6 +15,9 @@ app.logger.setLevel(logging.DEBUG)
 
 GROUPME_API_URL = 'https://api.groupme.com/v3/bots/post'
 GROUPME_BOT_ID = os.getenv('GROUPME_BOT_ID')
+GROUPME_ACCESS_TOKEN = os.getenv('GROUPME_ACCESS_TOKEN')
+
+poll_helper = PollHelper(GROUPME_ACCESS_TOKEN)
 
 @app.route('/')
 def hello_world():
@@ -30,6 +35,13 @@ def handle_message(message):
     if message['sender_type'] != 'user':
         # Don't process bot messages for now
         return 'OK', 200
+    
+    for attachment in message['attachments']:
+        if attachment['type'] == 'poll':
+            app.logger.debug('I found a poll')
+            poll: Poll = poll_helper.get_poll(message['group_id'], attachment['poll_id'])
+            send_message(f"That poll's title is {poll.subject}")
+            return 'OK', 200
 
     send_message('Hello, ' + message['name'])
 
